@@ -5,7 +5,7 @@ class Smart_arry
 public:
 	Smart_arry(int size);
 	Smart_arry(const Smart_arry& other);
-	void operator = (const Smart_arry& other);
+	Smart_arry& operator=(const Smart_arry& other);
 	void add_element(int element);
 	int get_element(int element);
 	~Smart_arry();
@@ -21,9 +21,10 @@ Smart_arry::Smart_arry(int size)
 	this->arr = new int[size] {0};
 }
 
-Smart_arry::Smart_arry(const Smart_arry& other)
+Smart_arry::Smart_arry(const Smart_arry& other)  // конструктор копирования
 {
- this->size = other.size;
+	this->i = other.i;
+    this->size = other.size;
 	this->arr = new int[size];
 	for (int j = 0; j < size; j++)
 	{
@@ -31,18 +32,25 @@ Smart_arry::Smart_arry(const Smart_arry& other)
 	}
 }
 
-void Smart_arry::operator = (const Smart_arry& other)
+Smart_arry& Smart_arry::operator=(const Smart_arry& other)  //  конструктор присваивания
 {
-	if (this->arr != nullptr)
+	if (this != &other) // что бы класс не присваивал себя себе
 	{
-		delete this->arr;
+		if (this->arr != nullptr)
+		{
+			delete this->arr;
+		}
+		this->i = other.i;
+		this->size = other.size;
+		this->arr = new int[size];
+		for (int j = 0; j < size; j++)
+		{
+			this->arr[j] = other.arr[j];
+		}
 	}
-	this->size = other.size;
-	this->arr = new int[size];
-	for (int j = 0; j < size; j++)
-	{
-		this->arr[j] = other.arr[j];
-	}
+	
+
+	return *this;
 }
 
 Smart_arry::~Smart_arry()
@@ -59,9 +67,10 @@ void Smart_arry::add_element(int element)
 	arr[i] = element;
 	i = i++;
 }
+
 int Smart_arry::get_element(int element)
 {
-	if (element >= size)
+	if (element > i)
 	{
 		throw std::exception("Index is greater than allowed!!! ");
 	}
